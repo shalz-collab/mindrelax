@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,17 +20,21 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun MindRelaxLogo(modifier: Modifier = Modifier) {
+    val primary = MaterialTheme.colorScheme.primary
+    val secondary = MaterialTheme.colorScheme.secondary
+    val tertiary = MaterialTheme.colorScheme.tertiary
+    
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         // Central Leaf
-        Leaf(Modifier.size(40.dp, 70.dp), Color(0xFF2E7D32))
+        Leaf(Modifier.size(40.dp, 70.dp), primary)
         
         // Left Leaves
-        Leaf(Modifier.size(35.dp, 60.dp).offset(x = (-25).dp, y = 10.dp).rotate(-30f), Color(0xFF4CAF50))
-        Leaf(Modifier.size(30.dp, 50.dp).offset(x = (-45).dp, y = 25.dp).rotate(-60f), Color(0xFF81C784))
+        Leaf(Modifier.size(35.dp, 60.dp).offset(x = (-25).dp, y = 10.dp).rotate(-30f), secondary)
+        Leaf(Modifier.size(30.dp, 50.dp).offset(x = (-45).dp, y = 25.dp).rotate(-60f), tertiary)
         
         // Right Leaves
-        Leaf(Modifier.size(35.dp, 60.dp).offset(x = 25.dp, y = 10.dp).rotate(30f), Color(0xFF4CAF50))
-        Leaf(Modifier.size(30.dp, 50.dp).offset(x = 45.dp, y = 25.dp).rotate(60f), Color(0xFF81C784))
+        Leaf(Modifier.size(35.dp, 60.dp).offset(x = 25.dp, y = 10.dp).rotate(30f), secondary)
+        Leaf(Modifier.size(30.dp, 50.dp).offset(x = 45.dp, y = 25.dp).rotate(60f), tertiary)
     }
 }
 
@@ -45,8 +50,8 @@ fun Leaf(modifier: Modifier = Modifier, color: Color) {
 @Composable
 fun MeditationIllustration(modifier: Modifier = Modifier) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(20.dp), verticalAlignment = Alignment.Bottom) {
-        StylizedPerson(Color(0xFF81C784))
-        StylizedPerson(Color(0xFF64B5F6))
+        StylizedPerson(MaterialTheme.colorScheme.primary)
+        StylizedPerson(MaterialTheme.colorScheme.secondary)
     }
 }
 
@@ -76,28 +81,29 @@ fun CutePlantIllustration(modifier: Modifier = Modifier) {
     Column(modifier = modifier, horizontalAlignment = Alignment.CenterHorizontally) {
         // Leaves
         Box(contentAlignment = Alignment.BottomCenter) {
-            Leaf(Modifier.size(30.dp, 50.dp).rotate(-20f).offset(x = (-20).dp), Color(0xFF4CAF50))
-            Leaf(Modifier.size(30.dp, 50.dp).rotate(20f).offset(x = 20.dp), Color(0xFF2E7D32))
-            Leaf(Modifier.size(25.dp, 45.dp).offset(y = (-10).dp), Color(0xFF81C784))
+            Leaf(Modifier.size(30.dp, 50.dp).rotate(-20f).offset(x = (-20).dp), MaterialTheme.colorScheme.primary)
+            Leaf(Modifier.size(30.dp, 50.dp).rotate(20f).offset(x = 20.dp), MaterialTheme.colorScheme.secondary)
+            Leaf(Modifier.size(25.dp, 45.dp).offset(y = (-10).dp), MaterialTheme.colorScheme.tertiary)
         }
         
         // Pot
         Box(
             modifier = Modifier
                 .size(80.dp, 60.dp)
-                .background(Color(0xFFBDBDBD), RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)),
+                .background(MaterialTheme.colorScheme.surfaceVariant, RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp)),
             contentAlignment = Alignment.Center
         ) {
             // Face
+            val eyeColor = MaterialTheme.colorScheme.onSurfaceVariant
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Row(horizontalArrangement = Arrangement.spacedBy(15.dp)) {
-                    Box(modifier = Modifier.size(6.dp).background(Color.Black, CircleShape))
-                    Box(modifier = Modifier.size(6.dp).background(Color.Black, CircleShape))
+                    Box(modifier = Modifier.size(6.dp).background(eyeColor, CircleShape))
+                    Box(modifier = Modifier.size(6.dp).background(eyeColor, CircleShape))
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 Canvas(modifier = Modifier.size(20.dp, 10.dp)) {
                     drawArc(
-                        color = Color.Black,
+                        color = eyeColor,
                         startAngle = 0f,
                         sweepAngle = 180f,
                         useCenter = false,
@@ -111,9 +117,14 @@ fun CutePlantIllustration(modifier: Modifier = Modifier) {
 
 @Composable
 fun LandscapeIllustration(modifier: Modifier = Modifier) {
+    val skyColor = MaterialTheme.colorScheme.primaryContainer
+    val mountain1Color = MaterialTheme.colorScheme.secondaryContainer
+    val mountain2Color = MaterialTheme.colorScheme.tertiaryContainer
+    val waterColor = MaterialTheme.colorScheme.primary
+    
     Canvas(modifier = modifier.clip(RoundedCornerShape(12.dp))) {
         // Sky
-        drawRect(Color(0xFFE3F2FD))
+        drawRect(skyColor)
         // Mountains
         val path = Path().apply {
             moveTo(0f, size.height)
@@ -121,7 +132,7 @@ fun LandscapeIllustration(modifier: Modifier = Modifier) {
             lineTo(size.width * 0.6f, size.height)
             close()
         }
-        drawPath(path, Color(0xFF90CAF9))
+        drawPath(path, mountain1Color)
         
         val path2 = Path().apply {
             moveTo(size.width * 0.4f, size.height)
@@ -129,11 +140,11 @@ fun LandscapeIllustration(modifier: Modifier = Modifier) {
             lineTo(size.width, size.height)
             close()
         }
-        drawPath(path2, Color(0xFF64B5F6))
+        drawPath(path2, mountain2Color)
         
         // Water
         drawRect(
-            color = Color(0xFF2196F3),
+            color = waterColor,
             topLeft = Offset(0f, size.height * 0.8f),
             size = Size(size.width, size.height * 0.2f)
         )

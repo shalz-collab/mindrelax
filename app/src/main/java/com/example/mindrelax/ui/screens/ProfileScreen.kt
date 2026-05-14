@@ -1,6 +1,7 @@
 package com.example.mindrelax.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
@@ -17,15 +18,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.mindrelax.ui.ProfileViewModel
+import com.example.mindrelax.ui.Screen
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(onNavigate: (String) -> Unit = {}, profileViewModel: ProfileViewModel = viewModel()) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = {},
-                actions = { IconButton(onClick = {}) { Icon(Icons.Default.Settings, null) } }
+                actions = { IconButton(onClick = { onNavigate(Screen.Settings.route) }) { Icon(Icons.Default.Settings, null) } }
             )
         }
     ) { padding ->
@@ -33,19 +38,32 @@ fun ProfileScreen() {
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             item {
                 Box(
-                    modifier = Modifier.size(100.dp).background(Color(0xFFE8F5E9), CircleShape),
+                    modifier = Modifier.size(100.dp).background(MaterialTheme.colorScheme.primaryContainer, CircleShape),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Person, null, modifier = Modifier.size(60.dp), tint = Color(0xFF4CAF50))
+                    Icon(Icons.Default.Person, null, modifier = Modifier.size(60.dp), tint = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
                 Spacer(modifier = Modifier.height(16.dp))
-                Text("Alex Johnson", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                Text("Mindful since Apr 2025", color = Color.Gray, fontSize = 14.sp)
+                Text(profileViewModel.userName, fontSize = 24.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                Text("Mindful since Apr 2025", color = MaterialTheme.colorScheme.onSurfaceVariant, fontSize = 14.sp)
+                
+                Button(
+                    onClick = { onNavigate(Screen.EditProfile.route) },
+                    modifier = Modifier.padding(top = 16.dp),
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.secondaryContainer, contentColor = MaterialTheme.colorScheme.onSecondaryContainer),
+                    shape = RoundedCornerShape(20.dp)
+                ) {
+                    Icon(Icons.Default.Edit, null, modifier = Modifier.size(18.dp))
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text("Edit Profile")
+                }
+
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
@@ -60,13 +78,42 @@ fun ProfileScreen() {
 
             item {
                 Column(modifier = Modifier.fillMaxWidth()) {
-                    ProfileMenuItem(Icons.Default.Person, "Account Settings")
-                    ProfileMenuItem(Icons.Default.Notifications, "Notifications")
-                    ProfileMenuItem(Icons.Default.Lock, "Privacy")
-                    ProfileMenuItem(Icons.Default.Help, "Help & Support")
-                    ProfileMenuItem(Icons.AutoMirrored.Filled.Logout, "Log Out", isLast = true)
+                    ProfileMenuItem(Icons.Default.Person, "Account Settings", onClick = { onNavigate(Screen.Settings.route) })
+                    ProfileMenuItem(Icons.Default.Notifications, "Notifications", onClick = { onNavigate(Screen.Settings.route) })
+                    ProfileMenuItem(Icons.Default.Lock, "Privacy", onClick = { onNavigate(Screen.Settings.route) })
+                    ProfileMenuItem(Icons.Default.Help, "Help & Support", onClick = { /* TODO */ })
+                    ProfileMenuItem(Icons.AutoMirrored.Filled.Logout, "Log Out", isLast = true, onClick = { 
+                        FirebaseAuth.getInstance().signOut()
+                        onNavigate(Screen.Login.route) 
+                    })
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ProfileStat(value: String, label: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(value, fontSize = 20.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+        Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+}
+
+@Composable
+fun ProfileMenuItem(icon: androidx.compose.ui.graphics.vector.ImageVector, title: String, isLast: Boolean = false, onClick: () -> Unit = {}) {
+    Column(modifier = Modifier.clickable { onClick() }) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(icon, null, modifier = Modifier.size(24.dp), tint = MaterialTheme.colorScheme.outline)
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(title, fontSize = 16.sp, modifier = Modifier.weight(1f), color = MaterialTheme.colorScheme.onSurface)
+            Icon(Icons.Default.ChevronRight, null, tint = MaterialTheme.colorScheme.outline)
+        }
+        if (!isLast) {
+            HorizontalDivider(color = MaterialTheme.colorScheme.outlineVariant)
         }
     }
 }
@@ -75,30 +122,4 @@ fun ProfileScreen() {
 @Composable
 fun ProfileScreenPreview() {
     ProfileScreen()
-}
-
-@Composable
-fun ProfileStat(value: String, label: String) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(value, fontSize = 20.sp, fontWeight = FontWeight.Bold)
-        Text(label, fontSize = 12.sp, color = Color.Gray)
-    }
-}
-
-@Composable
-fun ProfileMenuItem(icon: androidx.compose.ui.graphics.vector.ImageVector, title: String, isLast: Boolean = false) {
-    Column {
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Icon(icon, null, modifier = Modifier.size(24.dp), tint = Color.Gray)
-            Spacer(modifier = Modifier.width(16.dp))
-            Text(title, fontSize = 16.sp, modifier = Modifier.weight(1f))
-            Icon(Icons.Default.ChevronRight, null, tint = Color.Gray)
-        }
-        if (!isLast) {
-            HorizontalDivider(color = Color.LightGray.copy(alpha = 0.5f))
-        }
-    }
 }

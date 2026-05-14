@@ -28,11 +28,13 @@ fun ChatScreen() {
             TopAppBar(
                 title = {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Box(modifier = Modifier.size(40.dp).background(Color.LightGray, CircleShape))
+                        Box(modifier = Modifier.size(40.dp).background(MaterialTheme.colorScheme.primaryContainer, CircleShape), contentAlignment = Alignment.Center) {
+                            Icon(Icons.Default.Person, null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
+                        }
                         Spacer(modifier = Modifier.width(12.dp))
                         Column {
                             Text("MindRelax AI", fontSize = 16.sp, fontWeight = FontWeight.Bold)
-                            Text("● Online", fontSize = 10.sp, color = Color(0xFF4CAF50))
+                            Text("● Online", fontSize = 10.sp, color = MaterialTheme.colorScheme.primary)
                         }
                     }
                 },
@@ -42,7 +44,7 @@ fun ChatScreen() {
             )
         }
     ) { padding ->
-        Column(modifier = Modifier.padding(padding).fillMaxSize()) {
+        Column(modifier = Modifier.padding(padding).fillMaxSize().background(MaterialTheme.colorScheme.background)) {
             LazyColumn(
                 modifier = Modifier.weight(1f).padding(16.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -56,14 +58,14 @@ fun ChatScreen() {
                    Card(
                        modifier = Modifier.width(200.dp),
                        shape = RoundedCornerShape(16.dp),
-                       colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5))
+                       colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
                    ) {
                        Row(modifier = Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
-                           Icon(Icons.Default.PlayCircle, null, tint = Color(0xFF2E7D32))
+                           Icon(Icons.Default.PlayCircle, null, tint = MaterialTheme.colorScheme.primary)
                            Spacer(modifier = Modifier.width(8.dp))
                            Column {
-                               Text("Box Breathing", fontWeight = FontWeight.Bold, fontSize = 14.sp)
-                               Text("4 min", fontSize = 12.sp, color = Color.Gray)
+                               Text("Box Breathing", fontWeight = FontWeight.Bold, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                               Text("4 min", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f))
                            }
                        }
                    }
@@ -94,34 +96,28 @@ fun ChatScreen() {
                     modifier = Modifier.weight(1f),
                     shape = RoundedCornerShape(25.dp),
                     colors = OutlinedTextFieldDefaults.colors(
-                        focusedContainerColor = Color(0xFFF5F5F5),
-                        unfocusedContainerColor = Color(0xFFF5F5F5),
-                        focusedBorderColor = Color.Transparent,
-                        unfocusedBorderColor = Color.Transparent
+                        focusedContainerColor = MaterialTheme.colorScheme.surface,
+                        unfocusedContainerColor = MaterialTheme.colorScheme.surface,
+                        focusedBorderColor = MaterialTheme.colorScheme.primary,
+                        unfocusedBorderColor = MaterialTheme.colorScheme.outline
                     )
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 IconButton(
                     onClick = {},
-                    modifier = Modifier.background(Color(0xFF2E7D32), CircleShape)
+                    modifier = Modifier.background(MaterialTheme.colorScheme.primary, CircleShape)
                 ) {
-                    Icon(Icons.AutoMirrored.Filled.Send, null, tint = Color.White)
+                    Icon(Icons.AutoMirrored.Filled.Send, null, tint = MaterialTheme.colorScheme.onPrimary)
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
-@Composable
-fun ChatScreenPreview() {
-    ChatScreen()
-}
-
 @Composable
 fun ChatBubble(message: String, isUser: Boolean) {
     Surface(
-        color = if (isUser) Color(0xFF2E7D32) else Color(0xFFF5F5F5),
+        color = if (isUser) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
         shape = RoundedCornerShape(
             topStart = 16.dp,
             topEnd = 16.dp,
@@ -132,8 +128,14 @@ fun ChatBubble(message: String, isUser: Boolean) {
         Text(
             text = message,
             modifier = Modifier.padding(12.dp),
-            color = if (isUser) Color.White else Color.Black,
+            color = if (isUser) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
             fontSize = 14.sp
         )
     }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ChatScreenPreview() {
+    ChatScreen()
 }

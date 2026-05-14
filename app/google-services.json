@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "199955710237",
+    "project_id": "mindrela",
+    "storage_bucket": "mindrela.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:199955710237:android:60fa147621d873d69761f4",
+        "android_client_info": {
+          "package_name": "com.example.mindrelax"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5_iYDAr8i7sYtruSY-ZZqgGfgB285TJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

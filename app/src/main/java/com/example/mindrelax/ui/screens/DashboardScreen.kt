@@ -1,6 +1,7 @@
 package com.example.mindrelax.ui.screens
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -20,13 +21,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.mindrelax.ui.components.MindRelaxLogo
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.mindrelax.ui.ProfileViewModel
+import com.example.mindrelax.ui.Screen
 
 @Composable
-fun DashboardScreen() {
+fun DashboardScreen(onNavigate: (String) -> Unit = {}, profileViewModel: ProfileViewModel = viewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
             .padding(16.dp)
     ) {
         Row(
@@ -35,16 +39,20 @@ fun DashboardScreen() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
-                Text("Hi, Alex 👋", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                Text("Take a deep breath and\nlet's make today better.", color = Color.Gray)
+                val firstName = profileViewModel.userName.split(" ").firstOrNull() ?: "Alex"
+                Text("Hi, $firstName 👋", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                Text("Take a deep breath and\nlet's make today better.", color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Row {
-                IconButton(onClick = {}) { Icon(Icons.Default.Notifications, null) }
+                IconButton(onClick = {}) { Icon(Icons.Default.Notifications, null, tint = MaterialTheme.colorScheme.primary) }
                 Box(
-                    modifier = Modifier.size(40.dp).background(Color(0xFFE8F5E9), CircleShape),
+                    modifier = Modifier
+                        .size(40.dp)
+                        .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
+                        .clickable { onNavigate(Screen.Profile.route) },
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(Icons.Default.Person, null, tint = Color(0xFF4CAF50))
+                    Icon(Icons.Default.Person, null, tint = MaterialTheme.colorScheme.onPrimaryContainer)
                 }
             }
         }
@@ -53,38 +61,38 @@ fun DashboardScreen() {
 
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
             Card(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).clickable { onNavigate(Screen.Rewards.route) },
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFF1F8E9))
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.5f))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Wellness Score", fontSize = 12.sp, color = Color.Gray)
+                    Text("Wellness Score", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Box(
-                            modifier = Modifier.size(50.dp).background(Color.White, CircleShape).padding(8.dp),
+                            modifier = Modifier.size(50.dp).background(MaterialTheme.colorScheme.surface, CircleShape).padding(8.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text("82", fontWeight = FontWeight.Bold, color = Color(0xFF4CAF50))
+                            Text("82", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.primary)
                         }
                         Spacer(modifier = Modifier.width(8.dp))
-                        Text("Good", fontWeight = FontWeight.Bold)
+                        Text("Good", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
                     }
                 }
             }
 
             Card(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).clickable { onNavigate(Screen.MoodTracker.route) },
                 shape = RoundedCornerShape(16.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF3E0))
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f))
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Text("Streak", fontSize = 12.sp, color = Color.Gray)
+                    Text("Streak", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                     Spacer(modifier = Modifier.height(8.dp))
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Icon(Icons.Default.Whatshot, contentDescription = null, tint = Color(0xFFFF9800))
-                        Text(" 7", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-                        Text(" Days", fontSize = 14.sp)
+                        Text(" 7", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
+                        Text(" Days", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurface)
                     }
                 }
             }
@@ -92,31 +100,31 @@ fun DashboardScreen() {
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        Text("Today's Focus", fontWeight = FontWeight.Bold)
+        Text("Today's Focus", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
         Card(
             modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
             shape = RoundedCornerShape(16.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFE8F5E9))
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.2f))
         ) {
             Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
-                Icon(Icons.Default.Spa, null, tint = Color(0xFF4CAF50))
+                Icon(Icons.Default.Spa, null, tint = MaterialTheme.colorScheme.primary)
                 Spacer(modifier = Modifier.width(16.dp))
-                Text("Be kind to your mind", fontWeight = FontWeight.SemiBold)
+                Text("Be kind to your mind", fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
             }
         }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        Text("Quick Actions", fontWeight = FontWeight.Bold)
+        Text("Quick Actions", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
         val actions = listOf(
-            ActionItem("Journal", Icons.Default.Book, Color(0xFFFFF3E0)),
-            ActionItem("Meditate", Icons.Default.SelfImprovement, Color(0xFFE3F2FD)),
-            ActionItem("Music", Icons.Default.MusicNote, Color(0xFFF3E5F5)),
-            ActionItem("Chatbot", Icons.AutoMirrored.Filled.Chat, Color(0xFFE8F5E9)),
-            ActionItem("Games", Icons.Default.Gamepad, Color(0xFFFFFDE7)),
-            ActionItem("Plant", Icons.Default.LocalFlorist, Color(0xFFE0F2F1)),
-            ActionItem("Community", Icons.Default.Groups, Color(0xFFFBE9E7)),
-            ActionItem("More", Icons.Default.MoreHoriz, Color(0xFFF5F5F5))
+            ActionItem("Journal", Icons.Default.Book, MaterialTheme.colorScheme.primaryContainer, Screen.Journal.route),
+            ActionItem("Meditate", Icons.Default.SelfImprovement, MaterialTheme.colorScheme.secondaryContainer, Screen.Meditation.route),
+            ActionItem("Music", Icons.Default.MusicNote, MaterialTheme.colorScheme.tertiaryContainer, Screen.Meditation.route),
+            ActionItem("Chatbot", Icons.AutoMirrored.Filled.Chat, MaterialTheme.colorScheme.primaryContainer, Screen.Chatbot.route),
+            ActionItem("Games", Icons.Default.Gamepad, MaterialTheme.colorScheme.secondaryContainer, Screen.Games.route),
+            ActionItem("Plant", Icons.Default.LocalFlorist, MaterialTheme.colorScheme.tertiaryContainer, Screen.PlantCare.route),
+            ActionItem("Community", Icons.Default.Groups, MaterialTheme.colorScheme.primaryContainer, Screen.Community.route),
+            ActionItem("More", Icons.Default.MoreHoriz, MaterialTheme.colorScheme.secondaryContainer, Screen.Settings.route)
         )
 
         LazyVerticalGrid(
@@ -127,15 +135,18 @@ fun DashboardScreen() {
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             items(actions) { action ->
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.clickable { onNavigate(action.route) }
+                ) {
                     Box(
-                        modifier = Modifier.size(50.dp).background(action.color, RoundedCornerShape(12.dp)),
+                        modifier = Modifier.size(50.dp).background(action.color.copy(alpha = 0.5f), RoundedCornerShape(12.dp)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Icon(action.icon, contentDescription = null, tint = Color.DarkGray)
+                        Icon(action.icon, contentDescription = null, tint = MaterialTheme.colorScheme.onSurface)
                     }
                     Spacer(modifier = Modifier.height(4.dp))
-                    Text(action.title, fontSize = 10.sp)
+                    Text(action.title, fontSize = 10.sp, color = MaterialTheme.colorScheme.onSurface)
                 }
             }
         }
@@ -148,4 +159,4 @@ fun DashboardScreenPreview() {
     DashboardScreen()
 }
 
-data class ActionItem(val title: String, val icon: ImageVector, val color: Color)
+data class ActionItem(val title: String, val icon: ImageVector, val color: Color, val route: String)

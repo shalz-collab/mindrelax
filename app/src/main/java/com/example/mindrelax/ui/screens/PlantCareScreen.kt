@@ -32,19 +32,19 @@ fun PlantCareScreen() {
             modifier = Modifier
                 .padding(padding)
                 .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
                 .padding(24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Green Buddy", fontSize = 24.sp, fontWeight = FontWeight.Bold)
-            Text("Level 3", color = Color.Gray)
+            Text("Green Buddy", fontSize = 24.sp, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+            Text("Level 3", color = MaterialTheme.colorScheme.onSurfaceVariant)
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            // Placeholder for plant illustration
             Box(
                 modifier = Modifier
                     .size(220.dp)
-                    .background(Color(0xFFE8F5E9), CircleShape),
+                    .background(MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f), CircleShape),
                 contentAlignment = Alignment.Center
             ) {
                 CutePlantIllustration()
@@ -54,47 +54,50 @@ fun PlantCareScreen() {
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                    Text("Plant Health", fontWeight = FontWeight.Bold)
-                    Text("70%", color = Color(0xFF4CAF50))
+                    Text("Plant Health", fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onBackground)
+                    Text("70%", color = MaterialTheme.colorScheme.primary)
                 }
                 Spacer(modifier = Modifier.height(8.dp))
                 LinearProgressIndicator(
                     progress = 0.7f,
                     modifier = Modifier.fillMaxWidth().height(12.dp),
-                    color = Color(0xFF4CAF50),
-                    trackColor = Color(0xFFE8F5E9)
+                    color = MaterialTheme.colorScheme.primary,
+                    trackColor = MaterialTheme.colorScheme.surfaceVariant
                 )
             }
 
             Spacer(modifier = Modifier.height(40.dp))
 
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
-                PlantStat("Water", "90%", Icons.Default.WaterDrop, Color(0xFFE3F2FD))
-                PlantStat("Sunlight", "80%", Icons.Default.WbSunny, Color(0xFFFFF9C4))
-                PlantStat("Happiness", "95%", Icons.Default.Favorite, Color(0xFFFBE9E7))
+                PlantStat("Water", "90%", Icons.Default.WaterDrop, MaterialTheme.colorScheme.primaryContainer)
+                PlantStat("Sunlight", "80%", Icons.Default.WbSunny, MaterialTheme.colorScheme.secondaryContainer)
+                PlantStat("Happiness", "95%", Icons.Default.Favorite, MaterialTheme.colorScheme.tertiaryContainer)
             }
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier.size(56.dp).background(Color(0xFFF5F5F5), CircleShape)
-                ) { Icon(Icons.Default.Home, null) }
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier.size(56.dp).background(Color(0xFFF5F5F5), CircleShape)
-                ) { Icon(Icons.Default.LocalFlorist, null) }
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier.size(56.dp).background(Color(0xFFF5F5F5), CircleShape)
-                ) { Icon(Icons.Default.ShoppingBag, null) }
-                IconButton(
-                    onClick = {},
-                    modifier = Modifier.size(56.dp).background(Color(0xFFF5F5F5), CircleShape)
-                ) { Icon(Icons.Default.Person, null) }
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+                IconButton(onClick = {}, modifier = Modifier.size(56.dp).background(MaterialTheme.colorScheme.surface, CircleShape)) { Icon(Icons.Default.Home, null, tint = MaterialTheme.colorScheme.primary) }
+                IconButton(onClick = {}, modifier = Modifier.size(56.dp).background(MaterialTheme.colorScheme.primary, CircleShape)) { Icon(Icons.Default.LocalFlorist, null, tint = MaterialTheme.colorScheme.onPrimary) }
+                IconButton(onClick = {}, modifier = Modifier.size(56.dp).background(MaterialTheme.colorScheme.surface, CircleShape)) { Icon(Icons.Default.ShoppingBag, null, tint = MaterialTheme.colorScheme.primary) }
+                IconButton(onClick = {}, modifier = Modifier.size(56.dp).background(MaterialTheme.colorScheme.surface, CircleShape)) { Icon(Icons.Default.Person, null, tint = MaterialTheme.colorScheme.primary) }
             }
         }
+    }
+}
+
+@Composable
+fun PlantStat(label: String, value: String, icon: androidx.compose.ui.graphics.vector.ImageVector, color: Color) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Box(
+            modifier = Modifier.size(50.dp).background(color.copy(alpha = 0.5f), RoundedCornerShape(12.dp)),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(icon, null, tint = MaterialTheme.colorScheme.onSurface, modifier = Modifier.size(24.dp))
+        }
+        Spacer(modifier = Modifier.height(8.dp))
+        Text(label, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(value, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
@@ -102,19 +105,4 @@ fun PlantCareScreen() {
 @Composable
 fun PlantCareScreenPreview() {
     PlantCareScreen()
-}
-
-@Composable
-fun PlantStat(label: String, value: String, icon: androidx.compose.ui.graphics.vector.ImageVector, color: Color) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(
-            modifier = Modifier.size(50.dp).background(color, RoundedCornerShape(12.dp)),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(icon, null, tint = Color.DarkGray, modifier = Modifier.size(24.dp))
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        Text(label, fontSize = 12.sp, color = Color.Gray)
-        Text(value, fontWeight = FontWeight.Bold)
-    }
 }
